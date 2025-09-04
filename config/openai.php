@@ -46,4 +46,14 @@ return [
     */
 
     'request_timeout' => env('OPENAI_REQUEST_TIMEOUT', 30),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Other variables
+    |--------------------------------------------------------------------------
+    |
+    */
+    'gptmodel' => 'gpt-4o-mini',
+    'temperature' => 0.2,
+    'classify_enabled' => env('OPENAI_CLASSIFY_ENABLED', true)
 ];

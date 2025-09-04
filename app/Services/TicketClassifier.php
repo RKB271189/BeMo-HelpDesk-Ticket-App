@@ -14,6 +14,12 @@ final class TicketClassifier
 
     private $systemClassificationPrompt = "You are a classifier. Always strictly respond in JSON with keys category, explanation and confidence.";
 
+    public function __construct()
+    {
+        $this->gptModel = config('openai.gptmodel');
+        $this->temperature = config('openai.temperature');
+    }
+
     public function systemGenerateClassification(string $prompt): array
     {
         Log::info('Prompt of the ticket: ', [$prompt]);
