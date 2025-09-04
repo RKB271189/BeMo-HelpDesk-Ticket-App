@@ -49,25 +49,46 @@ class TicketController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
+    public function show(string $id) {}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        //
+        try {
+            Log::info('Ticket fetching for id: ', [$id]);
+            $ticket = $this->ticketContract->getDataById($id);
+            $arrTicket = $ticket->toArray();
+            Log::info('Ticket found: ', [$arrTicket]);
+            return response()->json(['ticket' => $arrTicket], 200);
+        } catch (Exception $ex) {
+            Log::error('Exception in fetchting single ticket: ', [$ex->getMessage()]);
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(TicketRequest $request, string $id)
     {
-        //
+        try {
+            $params = $request->except('_token', '_method');
+            Log::info('Ticket update params: ', [$params]);
+            $paramTicket = [
+                'subject' => $params['subject'],
+                'body' => $params['body'],
+                'status' => $params['status']
+            ];
+            $ticket = $this->ticketContract->updateData($params, $id);
+            $arrTicket = $ticket->toArray();
+            Log::info('Ticket updated: ', [$$arrTicket]);
+            return response()->json([], 200);
+        } catch (Exception $ex) {
+            Log::error('Exception in fetchting single ticket: ', [$ex->getMessage()]);
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
     }
 
     /**
