@@ -18,4 +18,12 @@ class Ticket extends Model
         'body',
         'status',
     ];
+    public function classification()
+    {
+        return $this->hasOne(TicketClassification::class);
+    }
+    public function notes()
+    {
+        return $this->hasMany(TicketNote::class);
+    }
 }
