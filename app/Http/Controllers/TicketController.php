@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\TicketContract;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
+    public function __construct(private TicketContract $ticketContract) {}
     /**
      * Display a listing of the resource.
      */
