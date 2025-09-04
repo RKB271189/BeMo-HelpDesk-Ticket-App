@@ -16,7 +16,7 @@ class ModelRepository implements ModelInterface
             return $this->model->limit($limit)->get();
         }
     }
-    public function getDataById(int $id): Model
+    public function getDataById($id): Model
     {
         return $this->model->find($id);
     }
@@ -24,12 +24,12 @@ class ModelRepository implements ModelInterface
     {
         return $this->model->create($params);
     }
-    public function updateData(array $params, int $id): Model
+    public function updateData(array $params, $id): Model
     {
         $obtModel = $this->model->findOrFail($id);
         return tap($obtModel)->update($params);
     }
-    public function deleteData(int $id): int
+    public function deleteData($id): int
     {
         $obtModel = $this->getDataById($id);
         return $obtModel->delete();

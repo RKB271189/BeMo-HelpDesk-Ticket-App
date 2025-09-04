@@ -9,11 +9,11 @@ interface ModelInterface
 {
     public function getData(int $limit = 0): Collection;
 
-    public function getDataById(int $id): Model;
+    public function getDataById($id): Model;
 
     public function createData(array $params): Model;
 
-    public function updateData(array $params, int $id): Model;
+    public function updateData(array $params, $id): Model;
 
-    public function deleteData(int $id): int;
+    public function deleteData($id): int;
 }
