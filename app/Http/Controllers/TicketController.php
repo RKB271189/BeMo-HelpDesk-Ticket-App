@@ -16,13 +16,22 @@ class TicketController extends Controller
      */
     public function index()
     {
-        //
+        try {
+        } catch (Exception $ex) {
+            Log::error('Exception in fetchting tickets: ', [$ex->getMessage()]);
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(TicketRequest $request)
+    public function create() {}
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(TicketRequest $request)
     {
         try {
             $params = $request->only('subject', 'body');
@@ -35,14 +44,6 @@ class TicketController extends Controller
             Log::error('Exception in creating ticket: ', [$ex->getMessage()]);
             return response()->json(['error' => 'Something went wrong'], 500);
         }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
