@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\TicketContract;
+use App\Http\Requests\TicketRequest;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TicketController extends Controller
 {
@@ -19,9 +22,19 @@ class TicketController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(TicketRequest $request)
     {
-        //
+        try {
+            $params = $request->only('subject', 'body');
+            Log::info('Ticket create parameters: ', [$params]);
+            $ticket = $this->ticketContract->createData($params);
+            $arrTicket = $ticket->toArray();
+            Log::info('Ticket created: ', [$arrTicket]);
+            return response()->json(['ticket' => $arrTicket], 200);
+        } catch (Exception $ex) {
+            Log::error('Exception in creating ticket: ', [$ex->getMessage()]);
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
     }
 
     /**
