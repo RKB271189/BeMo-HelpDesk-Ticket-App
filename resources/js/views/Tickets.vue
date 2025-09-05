@@ -118,7 +118,7 @@ export default {
             if (this.currentPage > 1) this.currentPage--;
         },
         async getCategories() {
-            await axios.get('api/categories')
+            await axios.get('/api/categories')
                 .then(res => {
                     this.categories = res.data.categories;
                 })
@@ -128,7 +128,7 @@ export default {
         },
         async fetchTickets() {
             this.loading = true;
-            await axios.get('api/tickets')
+            await axios.get('/api/tickets')
                 .then(res => {
                     this.tickets = res.data.tickets;
                 })
@@ -148,7 +148,6 @@ export default {
             this.serverMessage = message;
             setTimeout(() => {
                 this.clearNotification();
-
             }, 3000);
         },
         clearNotification() {

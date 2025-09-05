@@ -44,7 +44,7 @@ class TicketController extends Controller
             $ticket = $this->ticketContract->createData($params);
             $arrTicket = $ticket->toArray();
             Log::info('Ticket created: ', [$arrTicket]);
-            return response()->json(['ticket' => $arrTicket], 200);
+            return response()->json(['message' => 'Ticket creation was successful'], 200);
         } catch (Exception $ex) {
             Log::error('Exception in creating ticket: ', [$ex->getMessage()]);
             return response()->json(['error' => 'Something went wrong'], 500);
