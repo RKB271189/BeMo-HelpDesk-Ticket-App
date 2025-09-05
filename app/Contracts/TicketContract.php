@@ -16,7 +16,7 @@ final class TicketContract extends ModelRepository
     }
     public function getAllTickets(): Collection
     {
-        return $this->ticket::with(['classification', 'note'])->get();
+        return $this->ticket::with(['classification', 'note'])->orderBy('created_at', 'desc')->get();
     }
     public function getNewTicketQuery(): Builder
     {

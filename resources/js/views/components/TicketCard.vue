@@ -57,7 +57,7 @@ export default {
         async classify(id) {
             this.$emit('clear-notification');
             this.spinnerBtnTicketId = id;
-            await axios.post(`api/tickets/${id}/classify`)
+            await axios.post(`/api/tickets/${id}/classify`)
                 .then(res => {
                     this.$emit('update-notification', 'success', res.data.message);
                 })
