@@ -15,7 +15,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->string('subject');
             $table->text('body');
-            $table->enum('status', ['open', 'pending', 'closed'])->default('open');
+            $table->enum('status', ['new', 'classified'])->default('new');
             $table->timestamps();
         });
     }
