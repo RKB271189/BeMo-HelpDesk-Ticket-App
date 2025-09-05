@@ -54,6 +54,9 @@ return [
     |
     */
     'gptmodel' => 'gpt-4o-mini',
-    'temperature' => 0.2,
-    'classify_enabled' => env('OPENAI_CLASSIFY_ENABLED', true)
+    'classification' => [
+        'system_prompt' => "You are a classifier. Always strictly respond in JSON with keys category, explanation and confidence.",
+        'variables' => ['temperature' => 0.2],
+        'classify_enabled' => env('OPENAI_CLASSIFY_ENABLED', true)
+    ]
 ];

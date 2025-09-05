@@ -31,11 +31,14 @@ class ClassifyTicketJob implements ShouldQueue
             Log::info('Job for classifying ticket started for ticket id: ', [$this->ticketId]);
             $ticket = $ticketContract->getDataById($this->ticketId);
             Log::info('Job for classifying ticket started for ticket: ', [$ticket]);
-            if (config('openai.classify_enabled')) {
+            $configOpenAIClassification = config('openai.classification');
+            if ($configOpenAIClassification['classify_enabled']) {
                 Log::info('Open AI classification is enabled');
                 $prompt = "Subject: {$ticket->subject}\n\nBody: {$ticket->body}";
+                $systemPrompt = $configOpenAIClassification['system_prompt'];
                 Log::info('Job for classifying ticket with prompt: ', [$prompt]);
-                $response = $ticketClassifier->systemGenerateClassification($prompt);
+                $openAIVariables = $configOpenAIClassification['variables'];
+                $response = $ticketClassifier->systemGenerateClassification($prompt, $systemPrompt, $openAIVariables);
                 if (count($response) === 0) {
                     Log::info("Either exception(check the log) occured or no response from Open AI");
                 }
