@@ -107,6 +107,26 @@
     background: #198754;
 }
 
+.counter--one {
+    background-color: #fae094;
+}
+
+.counter--two {
+    background-color: #adfdd8;
+}
+
+.counter--three {
+    background-color: #adccfc;
+}
+
+.counter--four {
+    background-color: #f9a2ab;
+}
+
+.counter--five {
+    background-color: #c2faab;
+}
+
 .badge {
     display: inline-block;
     padding: 0.25em 0.4em;
@@ -630,5 +650,60 @@
     .ticket-section__select,
     .ticket-section__textarea {
         font-size: 0.9rem;
+    }
+}
+
+
+.ticket-counters {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 1rem auto;
+    font-family: sans-serif;
+}
+
+.ticket-counters__status,
+.ticket-counters__category {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-start;
+}
+
+.ticket-counter {   
+    border-radius: 0.5rem;
+    padding: 1rem;
+    flex: 1 1 150px;
+    text-align: center;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: transform 0.2s;
+}
+
+.ticket-counter:hover {
+    transform: translateY(-3px);
+}
+
+.ticket-counter__label {
+    font-size: 0.9rem;
+    color: #212529;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+.ticket-counter__count {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+
+    .ticket-counters__status,
+    .ticket-counters__category {
+        flex-direction: column;
+    }
+
+    .ticket-counter {
+        flex: 1 1 100%;
     }
 }
