@@ -22,7 +22,7 @@ class TicketResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'classification' => new TicketClassificationResource($this->whenLoaded('classification')),
-            'notes' => TicketNoteResource::collection($this->whenLoaded('notes')),
+            'note' => new TicketNoteResource($this->whenLoaded('note')),
         ];
     }
 }

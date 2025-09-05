@@ -11,4 +11,12 @@ final class TicketClassificationContract extends ModelRepository
     {
         parent::__construct($ticketClassification);
     }
+    public function getCategories()
+    {
+        $categories = $this->ticketClassification::select('category')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
+        return $categories;
+    }
 }

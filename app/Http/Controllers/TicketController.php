@@ -2,22 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\TicketClassificationContract;
 use App\Contracts\TicketContract;
 use App\Http\Requests\TicketRequest;
+use App\Http\Resources\TicketResource;
 use App\Jobs\ClassifyTicketJob;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class TicketController extends Controller
 {
-    public function __construct(private TicketContract $ticketContract) {}
+    public function __construct(private TicketContract $ticketContract, private TicketClassificationContract $ticketClassificationContract) {}
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         try {
+            $tickets = $this->ticketContract->getAllTickets();
+            $ticketsResource =  TicketResource::collection($tickets);
+            return response()->json(['tickets' => $ticketsResource], 200);
         } catch (Exception $ex) {
             Log::error('Exception in fetchting tickets: ', [$ex->getMessage()]);
             return response()->json(['error' => 'Something went wrong'], 500);
@@ -99,11 +103,27 @@ class TicketController extends Controller
     {
         //
     }
-
+    public function categories()
+    {
+        try {
+            $categories = $this->ticketClassificationContract->getCategories();
+            $arrCategories = $categories->toArray();
+            $arrCategories = [
+                "Billing",
+                "Technical",
+                "General"
+            ];
+            return response()->json(['categories' => $arrCategories], 200);
+        } catch (Exception $ex) {
+            Log::error('Exception in fetching unique category: ', [$ex->getMessage()]);
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
+    }
     public function classify(string $id)
     {
         try {
-            ClassifyTicketJob::dispatch($id);
+            ClassifyTicketJob::dispatchSync($id);
+            return response()->json(['message' => 'Ticket classification was successful'], 200);
         } catch (Exception $ex) {
             Log::error('Exception in classify single ticket: ', [$ex->getMessage()]);
             return response()->json(['error' => 'Something went wrong'], 500);

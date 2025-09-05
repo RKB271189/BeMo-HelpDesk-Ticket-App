@@ -8,6 +8,9 @@ export default defineConfig({
     server: {
         port: 5173,
         strictPort: true,
+        proxy: {
+            "/api": "http://php.test",
+        },
     },
     build: {
         outDir: path.resolve(__dirname, "public"),
