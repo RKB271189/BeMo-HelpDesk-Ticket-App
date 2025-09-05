@@ -1,9 +1,16 @@
 <template>
-    <h1>Welcome To BeMo</h1>
+    <PageLayout>
+        <template #page_content>
+            <h1>Welcome To BeMo</h1>
+        </template>
+    </PageLayout>
 </template>
 
 <script>
-export default {};
+import PageLayout from './components/PageLayout.vue';
+export default {
+    components: {
+        PageLayout
+    }
+};
 </script>
-
-<style></style>
