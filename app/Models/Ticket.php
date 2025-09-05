@@ -18,6 +18,14 @@ class Ticket extends Model
         'body',
         'status',
     ];
+    public function scopeNew($query)
+    {
+        return $query->where('status', 'new');
+    }
+    public function scopeClassified($query)
+    {
+        return $query->where('status', 'classified');
+    }
     public function classification()
     {
         return $this->hasOne(TicketClassification::class);
