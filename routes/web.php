@@ -13,4 +13,5 @@ Route::get('/{any}', function () {
 
 Route::middleware(['web'])->group(function () {
     Route::apiResource('tickets', TicketController::class);
+    Route::post('tickets/{id}/classify', TicketController::class, 'classify');
 });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\TicketContract;
 use App\Http\Requests\TicketRequest;
+use App\Jobs\ClassifyTicketJob;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -97,5 +98,15 @@ class TicketController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function classify(string $id)
+    {
+        try {
+            ClassifyTicketJob::dispatch($id);
+        } catch (Exception $ex) {
+            Log::error('Exception in classify single ticket: ', [$ex->getMessage()]);
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
     }
 }
