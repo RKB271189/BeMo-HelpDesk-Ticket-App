@@ -30,8 +30,8 @@ class Ticket extends Model
     {
         return $this->hasOne(TicketClassification::class);
     }
-    public function notes()
+    public function note()
     {
-        return $this->hasMany(TicketNote::class);
+        return $this->hasOne(TicketNote::class);
     }
 }
