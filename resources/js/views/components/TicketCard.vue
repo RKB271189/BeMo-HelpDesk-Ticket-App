@@ -21,10 +21,20 @@
             </div>
 
             <div class="ticket-card__actions">
-                <button class="button button--success">
-                    Classify
-                </button>
+                <button class="button button--success">Classify</button>
+                <button @click="editTicket('SOMEIDHERE')" class="button button--warning">Edit</button>
             </div>
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    name: 'Ticket Card',
+    methods: {
+        editTicket(id) {
+            this.$router.push({ path: `/ticket/${id}` });
+        }
+    }
+}
+</script>
