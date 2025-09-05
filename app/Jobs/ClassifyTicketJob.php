@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Contracts\TicketClassificationContract;
-use App\Models\Ticket;
+use App\Contracts\TicketContract;
 use App\Services\TicketClassifier;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,7 +17,7 @@ class ClassifyTicketJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(private Ticket $ticket, private TicketClassificationContract $ticketClassificationContract, private TicketClassifier $ticketClassifier)
+    public function __construct(private string $ticketId)
     {
         //
     }
@@ -25,24 +25,26 @@ class ClassifyTicketJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(TicketContract $ticketContract, TicketClassificationContract $ticketClassificationContract,  TicketClassifier $ticketClassifier): void
     {
         try {
-            Log::info('Job for classifying ticket started for ticket: ', [$this->ticket]);
+            Log::info('Job for classifying ticket started for ticket id: ', [$this->ticketId]);
+            $ticket = $ticketContract->getDataById($this->ticketId);
+            Log::info('Job for classifying ticket started for ticket: ', [$ticket]);
             if (config('openai.classify_enabled')) {
                 Log::info('Open AI classification is enabled');
-                $prompt = "Subject: {$this->ticket->subject}\n\nBody: {$this->ticket->body}";
+                $prompt = "Subject: {$ticket->subject}\n\nBody: {$ticket->body}";
                 Log::info('Job for classifying ticket with prompt: ', [$prompt]);
-                $response = $this->ticketClassifier->systemGenerateClassification($prompt);
+                $response = $ticketClassifier->systemGenerateClassification($prompt);
                 if (count($response) === 0) {
-                    Log::info("Either exception occured or no response from Open AI");
+                    Log::info("Either exception(check the log) occured or no response from Open AI");
                 }
                 Log::info('Job for classifying ticket open ai response: ', [$response]);
             } else {
                 Log::info('Open AI classification is disabled');
-                $response = $this->ticketClassifier->randomGenerateClassification();
+                $response = $ticketClassifier->randomGenerateClassification();
             }
-            $this->ticketClassificationContract->createData($response);
+            $ticketClassificationContract->createData($response);
         } catch (Exception $ex) {
             Log::error('Exception in a job for classification ticket: ', [$ex->getMessage()]);
         }
