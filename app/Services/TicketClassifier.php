@@ -10,36 +10,36 @@ final class TicketClassifier
 {
     private $gptModel = "gpt-4o-mini";
 
-    private $temperature = 0.2;
-
-    private $systemClassificationPrompt = "You are a classifier. Always strictly respond in JSON with keys category, explanation and confidence.";
-
     public function __construct()
     {
         $this->gptModel = config('openai.gptmodel');
-        $this->temperature = config('openai.temperature');
     }
 
-    public function systemGenerateClassification(string $prompt): array
+    public function systemGenerateClassification(string $prompt, string $systemPrompt, $variables = []): array
     {
-        Log::info('Prompt of the ticket: ', [$prompt]);
         $content = [];
+        Log::info('Open AI Request prompt: ', [$prompt]);
+        Log::info('Open AI System prompt: ', [$systemPrompt]);
         try {
-            Log::info('Making request to open ai');
-            $response = OpenAI::chat()->create([
+            $data = [
                 'model' => $this->gptModel,
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => $this->systemClassificationPrompt
+                        'content' => $systemPrompt
                     ],
                     [
                         'role' => 'user',
                         'content' => $prompt
                     ]
                 ],
-                'temperature' => $this->temperature
-            ]);
+            ];
+            if (count($variables) > 0) {
+                Log::info('Opena AI variables: ', [$variables]);
+                $data = array_merge($data, $variables);
+            }
+            Log::info('Making request to open ai');
+            $response = OpenAI::chat()->create($data);
             Log::info('Response from open ai: ', [$response]);
             $jsonContent = $response['choices'][0]['message']['content'] ?? '{}';
             $content = json_decode($jsonContent, true);
