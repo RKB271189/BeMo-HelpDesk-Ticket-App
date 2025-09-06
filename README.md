@@ -32,15 +32,17 @@ npm run dev
 
 OPENAI_API_KEY=
 OPENAI_ORGANIZATION=
+OPENAI_CLASSIFY_ENABLED=false ##change this to true if use Open AI
 
 php artisan key:generate
-
-php artisan migrate
-php artisan db:seed
 
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
+
+php artisan migrate
+php artisan db:seed
+
 ```
 
 ### 4. Change vite.config.js
