@@ -33,8 +33,8 @@ class OverrideClassificationRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'category.required'    => 'Please provide details for the ticket.',
-            'category.string'      => 'The body must be valid text.',
+            'category.required'    => 'Please select for the ticket.',
+            'category.string'      => 'The category must be valid string.',
             'note.required' => 'A note is required for the ticket.',
             'note.string'   => 'The note must be a valid string.',
             'note.max'      => 'The note may not be greater than 50 characters.',

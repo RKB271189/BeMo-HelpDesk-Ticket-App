@@ -48,6 +48,7 @@ export default {
             loadingTicket: false,
             selectCategory: '',
             note: '',
+            categories: [],
             ticket: {},
             showNotification: false,
             serverMessage: "",
@@ -55,8 +56,8 @@ export default {
         }
     },
     async mounted() {
-        await this.getCategories();
         await this.fetchTicket(this.$route.params.id);
+        await this.getCategories();
     },
     methods: {
         async getCategories() {
@@ -85,10 +86,10 @@ export default {
             const params = {
                 category: this.selectCategory,
                 note: this.note,
-                noted_id: this.ticket.note ? this.ticket.note.id : null,
+                note_id: this.ticket.note ? this.ticket.note.id : null,
                 classification_id: this.ticket.classification ? this.ticket.classification.id : null
             }
-            await axios.post(`/api/tickets/${this.ticket.id}`, params)
+            await axios.patch(`/api/tickets/${this.ticket.id}`, params)
                 .then(res => {
                     this.handleNotification('success', res.data.message);
                     this.ticket = res.data.ticket;

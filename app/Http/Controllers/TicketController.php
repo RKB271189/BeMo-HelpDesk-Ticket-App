@@ -87,8 +87,8 @@ class TicketController extends Controller
         try {
             $params = $request->only('note', 'category', 'note_id', 'classification_id');
             Log::info('Ticket update/overide category and update note params: ', [$params]);
-            $this->ticketClassificationContract->updateData(['category' => $params['category'], 'is_override' => true], $params['category_id']);
-            $this->ticketNoteContract->updateData(['note' => $params['note']], $params['note_id']);
+            $this->ticketClassificationContract->updateData(['ticket_id' => $id, 'category' => $params['category'], 'is_override' => true], $params['classification_id']);
+            $this->ticketNoteContract->updateData(['ticket_id' => $id, 'note' => $params['note']], $params['note_id']);
             Log::info('Ticket update/overide category and update note updated: ');
             return response()->json([], 200);
         } catch (Exception $ex) {
@@ -108,7 +108,7 @@ class TicketController extends Controller
     {
         try {
             $categories = $this->ticketClassificationContract->getCategories();
-            $arrCategories = $categories->toArray();          
+            $arrCategories = $categories->toArray();            
             return response()->json(['categories' => $arrCategories], 200);
         } catch (Exception $ex) {
             Log::error('Exception in fetching unique category: ', [$ex->getMessage()]);
