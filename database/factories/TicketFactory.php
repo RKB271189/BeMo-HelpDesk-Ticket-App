@@ -21,7 +21,7 @@ class TicketFactory extends Factory
             'id' => Str::ulid(),
             'subject' => $this->faker->sentence(),
             'body' => $this->faker->paragraph(),
-            'status' => $this->faker->randomElement(['new', 'classified']),
+            'status' => 'new'
         ];
     }
 }

@@ -4,9 +4,10 @@ namespace App\Contracts;
 
 use App\Contracts\Base\ModelRepository;
 use App\Models\Ticket;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
+
 
 final class TicketContract extends ModelRepository
 {
@@ -25,5 +26,13 @@ final class TicketContract extends ModelRepository
     public function getNewTicketQuery(): Builder
     {
         return $this->ticket::new();
+    }
+    public function getNewTicketCount(): int
+    {
+        return $this->ticket::new()->count();
+    }
+    public function getClassifiedTicketCount(): int
+    {
+        return $this->ticket::classified()->count();
     }
 }

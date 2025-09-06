@@ -342,3 +342,36 @@
         font-size: 0.9rem;
     }
 }
+
+.chart-wrapper {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+@media (max-width: 768px) {
+    .chart-wrapper {
+        max-width: 100%;
+        padding: 0.5rem;
+    }
+}
+
+.chart-wrapper__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 0.75rem;
+    color: #212529;
+}
+
+@media (max-width: 480px) {
+    .chart-wrapper {
+        padding: 0.25rem;
+    }
+
+    .chart-wrapper__title {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+}
