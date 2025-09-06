@@ -90,7 +90,9 @@ class TicketController extends Controller
             $this->ticketClassificationContract->updateData(['ticket_id' => $id, 'category' => $params['category'], 'is_override' => true], $params['classification_id']);
             $this->ticketNoteContract->updateData(['ticket_id' => $id, 'note' => $params['note']], $params['note_id']);
             Log::info('Ticket update/overide category and update note updated: ');
-            return response()->json([], 200);
+            $ticket = $this->ticketContract->getDataById($id);
+            $arrTicket = new TicketResource($ticket);
+            return response()->json(['ticket' => $arrTicket, 'message' => 'Update ticket successful'], 200);
         } catch (Exception $ex) {
             Log::error('Ticket update/overide category and update note: ', [$ex->getMessage()]);
             return response()->json(['error' => 'Something went wrong'], 500);
@@ -137,7 +139,7 @@ class TicketController extends Controller
             return response()->json(['message' => 'Ticket classification was successful'], 200);
         } catch (Exception $ex) {
             Log::error('Exception in classify single ticket: ', [$ex->getMessage()]);
-            return response()->json(['error' => 'Something went wrong'], 500);
+            return response()->json(['error' => 'Unable top clasify. Something went wrong. Please try again.'], 500);
         }
     }
 }

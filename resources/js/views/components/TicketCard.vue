@@ -19,15 +19,15 @@
                         :title="ticket.classification ? ticket.classification.explanation : ''">ℹ️</span>
                 </span>
             </div>
-            <div class="ticket-card__note alert alert--warning">
+            <div v-if="ticket.note" class="ticket-card__note alert alert--warning">
                 Note: {{ ticket.note ? ticket.note.note : '' }}
             </div>
 
             <div class="ticket-card__actions">
-                <button @click="classify(ticket.id)" class="button button--success"
+                <button v-if="ticket.status === 'new'" @click="classify(ticket.id)" class="button button--success"
                     :disabled="spinnerBtnTicketId && spinnerBtnTicketId === ticket.id"
-                    :class="spinnerBtnTicketId && spinnerBtnTicketId === ticket.id ? 'ticket-card__button--loading' : ''"> <span
-                        v-if="spinnerBtnTicketId && spinnerBtnTicketId === ticket.id"
+                    :class="spinnerBtnTicketId && spinnerBtnTicketId === ticket.id ? 'ticket-card__button--loading' : ''">
+                    <span v-if="spinnerBtnTicketId && spinnerBtnTicketId === ticket.id"
                         class="ticket-card__spinner"></span> Classify</button>
                 <button @click="editTicket(ticket.id)" class="button button--warning">Edit</button>
             </div>
@@ -60,6 +60,7 @@ export default {
             await axios.post(`/api/tickets/${id}/classify`)
                 .then(res => {
                     this.$emit('update-notification', 'success', res.data.message);
+                    this.$emit('fetch-tickets');
                 })
                 .catch(err => {
                     this.$emit('update-notification', 'error', err.response.data.error);
