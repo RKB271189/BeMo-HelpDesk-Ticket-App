@@ -17,7 +17,7 @@
                     </button>
                 </div>
                 <TicketCard :tickets="paginatedTickets" @update-notification="handleNotification"
-                    @clear-notification="clearNotification" />
+                    @clear-notification="clearNotification" @fetch-tickets="fetchTickets" />
                 <nav class="pagination">
                     <ul class="pagination__list">
                         <li class="pagination__item" :class="{ 'pagination__item--disabled': currentPage === 1 }">
@@ -64,7 +64,7 @@ export default {
             tickets: [],
             currentPage: 1,
             perPage: 9,
-            showNotification: false,            
+            showNotification: false,
             serverMessage: "",
             messageType: "",
             errorMessage: "",
@@ -122,7 +122,6 @@ export default {
                     this.categories = res.data.categories;
                 })
                 .catch(err => {
-                    console.error('Error fetching data:', err);
                 });
         },
         async fetchTickets() {
@@ -130,12 +129,12 @@ export default {
             await axios.get('/api/tickets')
                 .then(res => {
                     this.tickets = res.data.tickets;
+                    this.errorMessage = this.tickets.length === 0 ? "No tickets found" : "";
                 })
                 .catch(err => {
-                    console.error('Error fetching data:', err);
+                    this.errorMessage = this.tickets.length === 0 ? err.response.data.error : ""
                 });
             this.loading = false;
-            this.errorMessage = this.tickets.length === 0 ? "No tickets found" : ""
         },
         clearFilter() {
             this.searchQuery = '';
