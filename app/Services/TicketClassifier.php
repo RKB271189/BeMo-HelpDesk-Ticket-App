@@ -38,12 +38,20 @@ final class TicketClassifier
                 Log::info('Opena AI variables: ', [$variables]);
                 $data = array_merge($data, $variables);
             }
-            Log::info('Making request to open ai');
+            Log::info('Making request to open ai with data: ', [$data]);
             $response = OpenAI::chat()->create($data);
             Log::info('Response from open ai: ', [$response]);
             $jsonContent = $response['choices'][0]['message']['content'] ?? '{}';
             $content = json_decode($jsonContent, true);
             Log::info('Decoded response from open ai: ', [$content]);
+            if (
+                !isset($content['category']) ||
+                !isset($content['explanation']) ||
+                !isset($content['confidence'])
+            ) {
+                $content = [];
+                throw new Exception('OpenAI response missing required classification keys.');
+            }
         } catch (Exception $ex) {
             Log::error('Exception generating system classification: ', [$ex->getMessage()]);
         }
