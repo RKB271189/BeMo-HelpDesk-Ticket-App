@@ -113,9 +113,13 @@ class TicketController extends Controller
             $classifiedTicketCount = $this->ticketContract->getClassifiedTicketCount();
             $dashboardCounter = [
                 'new_ticket' => $newTicketCount,
-                'classified_tikcet' => $classifiedTicketCount
+                'classified_tikcet' => $classifiedTicketCount,
+                'categories' => [],
             ];
-            return response()->json(['counter' => $dashboardCounter], 200);
+            $categories = $this->ticketClassificationContract->getDistinctCategoryCount();
+            $dashboardCounter['categories'] = $categories->toArray();
+            $statistics = $this->ticketClassificationContract->getStatistics();
+            return response()->json(['counter' => $dashboardCounter, 'statistics' => $statistics->toArray()], 200);
         } catch (Exception $ex) {
             Log::error('Exception in fetching data for dashboard: ', [$ex->getMessage()]);
             return response()->json(['error' => 'Something went wrong'], 500);
@@ -135,7 +139,7 @@ class TicketController extends Controller
     public function classify(string $id)
     {
         try {
-            ClassifyTicketJob::dispatchSync($id);
+            ClassifyTicketJob::dispatch($id);
             return response()->json(['message' => 'Ticket classification was successful'], 200);
         } catch (Exception $ex) {
             Log::error('Exception in classify single ticket: ', [$ex->getMessage()]);

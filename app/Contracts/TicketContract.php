@@ -4,9 +4,10 @@ namespace App\Contracts;
 
 use App\Contracts\Base\ModelRepository;
 use App\Models\Ticket;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
+
 
 final class TicketContract extends ModelRepository
 {
