@@ -11,7 +11,6 @@
                         <option value="">All Categories</option>
                         <option v-for="(category, index) in categories" :value="category" :key="index">{{ category }}
                         </option>
-
                     </select>
                     <button @click="clearFilter" class="button button--danger">
                         Clear
@@ -65,10 +64,10 @@ export default {
             tickets: [],
             currentPage: 1,
             perPage: 9,
-            showNotification: false,
-            errorMessage: "",
+            showNotification: false,            
             serverMessage: "",
             messageType: "",
+            errorMessage: "",
         };
     },
     watch: {

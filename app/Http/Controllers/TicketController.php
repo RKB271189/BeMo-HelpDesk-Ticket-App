@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Contracts\TicketClassificationContract;
 use App\Contracts\TicketContract;
+use App\Contracts\TicketNoteContract;
+use App\Http\Requests\OverrideClassificationRequest;
 use App\Http\Requests\TicketRequest;
 use App\Http\Resources\TicketResource;
 use App\Jobs\ClassifyTicketJob;
@@ -12,7 +14,11 @@ use Illuminate\Support\Facades\Log;
 
 class TicketController extends Controller
 {
-    public function __construct(private TicketContract $ticketContract, private TicketClassificationContract $ticketClassificationContract) {}
+    public function __construct(
+        private TicketContract $ticketContract,
+        private TicketClassificationContract $ticketClassificationContract,
+        private TicketNoteContract $ticketNoteContract
+    ) {}
     /**
      * Display a listing of the resource.
      */
@@ -54,17 +60,12 @@ class TicketController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id) {}
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function show(string $id)
     {
         try {
             Log::info('Ticket fetching for id: ', [$id]);
             $ticket = $this->ticketContract->getDataById($id);
-            $arrTicket = $ticket->toArray();
+            $arrTicket = new TicketResource($ticket);
             Log::info('Ticket found: ', [$arrTicket]);
             return response()->json(['ticket' => $arrTicket], 200);
         } catch (Exception $ex) {
@@ -74,24 +75,24 @@ class TicketController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id) {}
+
+    /**
      * Update the specified resource in storage.
      */
-    public function update(TicketRequest $request, string $id)
+    public function update(OverrideClassificationRequest $request, string $id)
     {
         try {
-            $params = $request->except('_token', '_method');
-            Log::info('Ticket update params: ', [$params]);
-            $paramTicket = [
-                'subject' => $params['subject'],
-                'body' => $params['body'],
-                'status' => $params['status']
-            ];
-            $ticket = $this->ticketContract->updateData($params, $id);
-            $arrTicket = $ticket->toArray();
-            Log::info('Ticket updated: ', [$$arrTicket]);
+            $params = $request->only('note', 'category', 'note_id', 'classification_id');
+            Log::info('Ticket update/overide category and update note params: ', [$params]);
+            $this->ticketClassificationContract->updateData(['category' => $params['category'], 'is_override' => true], $params['category_id']);
+            $this->ticketNoteContract->updateData(['note' => $params['note']], $params['note_id']);
+            Log::info('Ticket update/overide category and update note updated: ');
             return response()->json([], 200);
         } catch (Exception $ex) {
-            Log::error('Exception in fetchting single ticket: ', [$ex->getMessage()]);
+            Log::error('Ticket update/overide category and update note: ', [$ex->getMessage()]);
             return response()->json(['error' => 'Something went wrong'], 500);
         }
     }
@@ -107,12 +108,7 @@ class TicketController extends Controller
     {
         try {
             $categories = $this->ticketClassificationContract->getCategories();
-            $arrCategories = $categories->toArray();
-            $arrCategories = [
-                "Billing",
-                "Technical",
-                "General"
-            ];
+            $arrCategories = $categories->toArray();          
             return response()->json(['categories' => $arrCategories], 200);
         } catch (Exception $ex) {
             Log::error('Exception in fetching unique category: ', [$ex->getMessage()]);

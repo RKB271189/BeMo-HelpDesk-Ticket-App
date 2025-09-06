@@ -19,8 +19,7 @@ return new class extends Migration
             $table->text('explanation');
             $table->decimal('confidence', 5, 4);
             $table->boolean('is_override')->default(false);
-            $table->timestamp('processed_at')->nullable();
-            $table->enum('job_status', ['pending', 'processing', 'completed', 'failed'])->default('pending');
+            $table->timestamp('processed_at')->nullable();          
             $table->timestamps();
         });
     }
