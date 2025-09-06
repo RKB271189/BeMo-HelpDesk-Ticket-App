@@ -13,7 +13,7 @@ export default defineConfig({
         },
     },
     build: {
-        outDir: path.resolve(__dirname, "public"),
+        outDir: path.resolve(__dirname, "public/build"),
         emptyOutDir: true,
         rollupOptions: {
             input: "resources/js/main.js",
