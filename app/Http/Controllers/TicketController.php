@@ -104,11 +104,26 @@ class TicketController extends Controller
     {
         //
     }
+    public function dashboard()
+    {
+        try {
+            $newTicketCount = $this->ticketContract->getNewTicketCount();
+            $classifiedTicketCount = $this->ticketContract->getClassifiedTicketCount();
+            $dashboardCounter = [
+                'new_ticket' => $newTicketCount,
+                'classified_tikcet' => $classifiedTicketCount
+            ];
+            return response()->json(['counter' => $dashboardCounter], 200);
+        } catch (Exception $ex) {
+            Log::error('Exception in fetching data for dashboard: ', [$ex->getMessage()]);
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
+    }
     public function categories()
     {
         try {
             $categories = $this->ticketClassificationContract->getCategories();
-            $arrCategories = $categories->toArray();            
+            $arrCategories = $categories->toArray();
             return response()->json(['categories' => $arrCategories], 200);
         } catch (Exception $ex) {
             Log::error('Exception in fetching unique category: ', [$ex->getMessage()]);

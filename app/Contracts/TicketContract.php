@@ -26,4 +26,12 @@ final class TicketContract extends ModelRepository
     {
         return $this->ticket::new();
     }
+    public function getNewTicketCount(): int
+    {
+        return $this->ticket::new()->count();
+    }
+    public function getClassifiedTicketCount(): int
+    {
+        return $this->ticket::classified()->count();
+    }
 }
