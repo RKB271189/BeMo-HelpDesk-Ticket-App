@@ -15,13 +15,9 @@ class TicketSeeder extends Seeder
     public function run(): void
     {
         Ticket::factory()->count(30)->create()->each(function ($ticket) {
-            $notesCount = rand(0, 3);
-
-            for ($i = 0; $i < $notesCount; $i++) {
-                TicketNote::factory()->create([
-                    'ticket_id' => $ticket->id
-                ]);
-            }
+            TicketNote::factory()->create([
+                'ticket_id' => $ticket->id
+            ]);
         });
     }
 }

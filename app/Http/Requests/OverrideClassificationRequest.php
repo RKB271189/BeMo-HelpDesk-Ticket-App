@@ -26,8 +26,8 @@ class OverrideClassificationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category' => ['required', 'string'],
-            'note' => ['required', 'string', 'max:50'],
+            'category' => ['required', 'string','max:50'],
+            'note' => ['required', 'string', 'max:255'],
         ];
     }
     public function messages(): array
