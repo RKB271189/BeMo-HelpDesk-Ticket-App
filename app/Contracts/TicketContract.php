@@ -18,6 +18,10 @@ final class TicketContract extends ModelRepository
     {
         return $this->ticket::with(['classification', 'note'])->orderBy('created_at', 'desc')->get();
     }
+    public function getDataById($id): Model
+    {
+        return $this->ticket::with(['classification', 'note'])->find($id);
+    }
     public function getNewTicketQuery(): Builder
     {
         return $this->ticket::new();

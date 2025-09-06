@@ -13,6 +13,8 @@ class TicketClassification extends Model
         'category',
         'explanation',
         'confidence',
+        'is_override',
+        'processed_at'
     ];
     public function ticket()
     {
